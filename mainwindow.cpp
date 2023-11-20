@@ -18,6 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(reg, SIGNAL(backClicked()), this, SLOT(goHome()));
     connect(log, SIGNAL(backClicked()), this, SLOT(goHome()));
     connect(reg, SIGNAL(confirmClicked(QString,QString,QJsonDocument)), this, SLOT(confirmUserSignUp(QString,QString,QJsonDocument)));
+    connect(log, SIGNAL(updateClicked(QString,QString,QJsonDocument)), this, SLOT(confirmUserSignUp(QString,QString,QJsonDocument)));
     connect(authHandler, SIGNAL(userSignedIn(QJsonDocument)), this, SLOT(goLogin(QJsonDocument)));
     connect(authHandler, SIGNAL(userSignedUp()), this, SLOT(goRegist()));
     connect(authHandler, SIGNAL(userDeniedSignUp()), this, SLOT(goDeniedRegist()));
