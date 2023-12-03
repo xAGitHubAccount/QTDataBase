@@ -18,6 +18,8 @@ public slots:
     //void networkReplyReadyRead();
     void performAuthinticatedDBCall();
     void performAuthinticatedPostData();
+    void performAuthinticatedPutData(const QJsonDocument jDoc);
+    void performAuthinticatedChangePass(const QString &password);
     void parseResponse();
     void networkReplyReadyRead();
 signals:

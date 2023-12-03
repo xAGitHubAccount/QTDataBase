@@ -28,6 +28,8 @@ public slots:
 
 private slots:
     void confirmUserSignUp(QString, QString, QJsonDocument);
+    void updatePass(QString);
+    void updateData(QJsonDocument);
     void on_loginButton_clicked();
     void on_registButton_clicked();
     void goHome();

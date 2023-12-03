@@ -18,7 +18,8 @@ public:
     ~login();
 
 signals:
-    void updateClicked(QString user, QString pass, QJsonDocument jDoc);
+    void updateClicked(QJsonDocument jDoc);
+    void updateClick(QString pass);
     void backClicked();
 
 private slots:

@@ -36,6 +36,7 @@ void DBAuthHandler::userSignUp(const QString &email, const QString &password, co
 
 void DBAuthHandler::userSignIn(const QString &email, const QString &password)
 {
+    https://identitytoolkit.googleapis.com/v1/accounts:update?key=[API_KEY]
     QString signInEndpoint = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + apiKey;
     userEmail = email;
     QVariantMap vPayload;
@@ -62,12 +63,16 @@ void DBAuthHandler::networkReplyReadyRead()
 {
     QByteArray response = networkReply->readAll();
     qDebug() << response;
+    jsonDoc = QJsonDocument::fromJson(response);
+    networkReply->deleteLater();
     //parseResponse(response);
+    emit userSignedIn(jsonDoc);
 }
 
 void DBAuthHandler::parseResponse()
 {
     QJsonDocument jsonDocument = QJsonDocument::fromJson(networkReply->readAll());
+    networkReply->deleteLater();
     if(jsonDocument.object().contains("error"))
     {
         if(mode == 1)
@@ -75,6 +80,7 @@ void DBAuthHandler::parseResponse()
         }
         else if(mode == 2)
         {
+            qDebug() << jsonDocument.object().value("error").toString();
             emit userDeniedSignUp();
         }
     }
@@ -84,10 +90,10 @@ void DBAuthHandler::parseResponse()
         if(mode == 1)
         {
             performAuthinticatedDBCall();
-            emit userSignedIn(jsonDoc);
         }
         else if(mode == 2)
         {
+            qDebug() << userEmail;
             performAuthinticatedPostData();
             emit userSignedUp();
         }
@@ -101,12 +107,34 @@ void DBAuthHandler::parseResponse()
 
 void DBAuthHandler::performAuthinticatedPostData()
 {
-    qDebug() << userEmail;
-    QString endpoint = "https://qttest-122de-default-rtdb.firebaseio.com/users/"+ userEmail.replace(".", ",") + ".json?auth=" + iDToken;
+
+    QString endpoint = "https://qttest-122de-default-rtdb.firebaseio.com/users/"+ userEmail.replace(".", ",") + "/.json?auth=" + iDToken;
     QNetworkRequest newRequest((QUrl(endpoint)));
     newRequest.setHeader(QNetworkRequest::ContentTypeHeader, QString("application/json"));
     //add data to database
-    networkManager->put(newRequest, jsonDoc.toJson());
+    networkManager->post(newRequest, jsonDoc.toJson());
+}
+
+void DBAuthHandler::performAuthinticatedChangePass(const QString &password)
+{
+    QString endpoint = "https://identitytoolkit.googleapis.com/v1/accounts:update?key=" + apiKey;
+    QVariantMap vPayload;
+    vPayload["idToken"] = iDToken;
+    vPayload["password"] = password;
+    vPayload["returnSecureToken"] = true;
+
+    QJsonDocument jsonPayload = QJsonDocument::fromVariant(vPayload);
+    performPOST(endpoint, jsonPayload);
+}
+
+void DBAuthHandler::performAuthinticatedPutData(const QJsonDocument jDoc)
+{
+
+    QString endpoint = "https://qttest-122de-default-rtdb.firebaseio.com/users/"+ userEmail.replace(".", ",") + "/.json?auth=" + iDToken;
+    QNetworkRequest newRequest((QUrl(endpoint)));
+    newRequest.setHeader(QNetworkRequest::ContentTypeHeader, QString("application/json"));
+    //add data to database
+    networkManager->put(newRequest, jDoc.toJson());
 }
 
 void DBAuthHandler::performAuthinticatedDBCall()
@@ -114,7 +142,5 @@ void DBAuthHandler::performAuthinticatedDBCall()
     qDebug() << userEmail;
     QString endpoint = "https://qttest-122de-default-rtdb.firebaseio.com/users/" + userEmail.replace(".", ",") + "/.json?auth=" + iDToken;
     networkReply = networkManager->get(QNetworkRequest(QUrl(endpoint)));
-    QJsonDocument jsonDocument = QJsonDocument::fromJson(networkReply->readAll());
-    qDebug() << networkReply->readAll();
-    jsonDoc = jsonDocument;
+    connect(networkReply, SIGNAL(readyRead()), this, SLOT(networkReplyReadyRead()));
 }

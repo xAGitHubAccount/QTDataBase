@@ -2,6 +2,7 @@
 #include "ui_login.h"
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QDebug>
 
 login::login(QWidget *parent) :
     QWidget(parent),
@@ -29,13 +30,12 @@ void login::on_pushButton_clicked()
 
 void login::on_update_clicked()
 {
-    //QVariantMap newAccount = {{ui->emailRegist->text().replace(".",","),QVariantMap{{"Email", ui->emailRegist->text()},{"Username", ui->userRegist->text()},{"Password", ui->passRegist->text()}}}};
-    QVariantMap newAccount;
-    newAccount["Email"] = ui->emailLogged->text();
-    newAccount["Username"] = ui->userLogged->text();
-    newAccount["Password"] = ui->changePass->text();
-    QJsonDocument jsonDoc = QJsonDocument::fromVariant(newAccount);
-    //ui->label->setText("");
-    emit updateClicked(ui->emailLogged->text(), ui->changePass->text(), jsonDoc);
+    //QVariantMap newAccount;
+    //newAccount["Email"] = ui->emailLogged->text();
+    //newAccount["Username"] = ui->userLogged->text();
+    //newAccount["Password"] = ui->changePass->text();
+    //QJsonDocument jsonDoc = QJsonDocument::fromVariant(newAccount);
+    emit updateClick(ui->changePass->text());
+    //emit updateClicked(jsonDoc);
 }
 
