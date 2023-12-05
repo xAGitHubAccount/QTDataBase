@@ -36,6 +36,8 @@ private slots:
     void goLogin(QJsonDocument jDoc);
     void goRegist();
     void goDeniedRegist();
+    void deniedLogin();
+    void loginChangePass();
 
 private:
     Ui::MainWindow *ui;

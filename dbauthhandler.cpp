@@ -36,7 +36,6 @@ void DBAuthHandler::userSignUp(const QString &email, const QString &password, co
 
 void DBAuthHandler::userSignIn(const QString &email, const QString &password)
 {
-    https://identitytoolkit.googleapis.com/v1/accounts:update?key=[API_KEY]
     QString signInEndpoint = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + apiKey;
     userEmail = email;
     QVariantMap vPayload;
@@ -77,6 +76,7 @@ void DBAuthHandler::parseResponse()
     {
         if(mode == 1)
         {
+            emit userDeniedSignIn();
         }
         else if(mode == 2)
         {
@@ -100,7 +100,7 @@ void DBAuthHandler::parseResponse()
     }
     else
     {
-
+        emit changedPass();
     }
     mode = 0;
 }

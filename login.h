@@ -15,6 +15,7 @@ class login : public QWidget
 public:
     explicit login(QWidget *parent = nullptr);
     void userLoggedIn(QJsonDocument jDoc);
+    void changePassLogged();
     ~login();
 
 signals:

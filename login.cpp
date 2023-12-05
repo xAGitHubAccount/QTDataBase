@@ -23,6 +23,12 @@ void login::userLoggedIn(QJsonDocument jDoc)
     ui->passLogged->setText(jDoc.object().value("Password").toString());
 }
 
+void login::changePassLogged()
+{
+    ui->passLogged->setText(ui->changePass->text());
+    ui->label->setText("Password changed");
+}
+
 void login::on_pushButton_clicked()
 {
     emit backClicked();

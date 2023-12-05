@@ -24,8 +24,10 @@ public slots:
     void networkReplyReadyRead();
 signals:
     void userSignedIn(QJsonDocument jDoc);
+    void userDeniedSignIn();
     void userSignedUp();
     void userDeniedSignUp();
+    void changedPass();
 private:
     void performPOST(const QString &url, const QJsonDocument &payload);
     QString apiKey;

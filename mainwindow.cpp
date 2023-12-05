@@ -21,8 +21,10 @@ MainWindow::MainWindow(QWidget *parent)
     connect(log, SIGNAL(updateClicked(QJsonDocument)), this, SLOT(updateData(QJsonDocument)));
     connect(log, SIGNAL(updateClick(QString)), this, SLOT(updatePass(QString)));
     connect(authHandler, SIGNAL(userSignedIn(QJsonDocument)), this, SLOT(goLogin(QJsonDocument)));
+    connect(authHandler, SIGNAL(userDeniedSignIn()), this, SLOT(deniedLogin()));
     connect(authHandler, SIGNAL(userSignedUp()), this, SLOT(goRegist()));
     connect(authHandler, SIGNAL(userDeniedSignUp()), this, SLOT(goDeniedRegist()));
+    connect(authHandler, SIGNAL(changedPass()), this, SLOT(loginChangePass()));
 }
 
 MainWindow::~MainWindow()
@@ -56,6 +58,11 @@ void MainWindow::goLogin(QJsonDocument jDoc)
     log->userLoggedIn(jDoc);
 }
 
+void MainWindow::loginChangePass()
+{
+    log->changePassLogged();
+}
+
 void MainWindow::goRegist()
 {
     reg->userRegistered();
@@ -64,6 +71,11 @@ void MainWindow::goRegist()
 void MainWindow::goDeniedRegist()
 {
     reg->userDeniedRegist();
+}
+
+void MainWindow::deniedLogin()
+{
+    ui->label_3->setText("Incorrect username or password");
 }
 
 void MainWindow::on_registButton_clicked()
