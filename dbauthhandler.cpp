@@ -97,10 +97,14 @@ void DBAuthHandler::parseResponse()
             performAuthinticatedPostData();
             emit userSignedUp();
         }
+        else if(mode == 3)
+        {
+            emit changedPass();
+        }
     }
     else
     {
-        emit changedPass();
+        qDebug() << "In";
     }
     mode = 0;
 }
@@ -117,6 +121,7 @@ void DBAuthHandler::performAuthinticatedPostData()
 
 void DBAuthHandler::performAuthinticatedChangePass(const QString &password)
 {
+    mode = 3;
     QString endpoint = "https://identitytoolkit.googleapis.com/v1/accounts:update?key=" + apiKey;
     QVariantMap vPayload;
     vPayload["idToken"] = iDToken;

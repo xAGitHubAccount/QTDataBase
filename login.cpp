@@ -26,12 +26,21 @@ void login::userLoggedIn(QJsonDocument jDoc)
 void login::changePassLogged()
 {
     ui->passLogged->setText(ui->changePass->text());
+    QVariantMap newAccount;
+    newAccount["Email"] = ui->emailLogged->text();
+    newAccount["Username"] = ui->userLogged->text();
+    newAccount["Password"] = ui->changePass->text();
+    QJsonDocument jsonDoc = QJsonDocument::fromVariant(newAccount);
+    emit updateClicked(jsonDoc);
     ui->label->setText("Password changed");
+    ui->update->setEnabled(true);
 }
 
 void login::on_pushButton_clicked()
 {
     emit backClicked();
+    ui->label->setText("Logged in successfully!");
+    ui->update->setEnabled(true);
 }
 
 void login::on_update_clicked()
@@ -41,6 +50,7 @@ void login::on_update_clicked()
     //newAccount["Username"] = ui->userLogged->text();
     //newAccount["Password"] = ui->changePass->text();
     //QJsonDocument jsonDoc = QJsonDocument::fromVariant(newAccount);
+    ui->update->setEnabled(false);
     emit updateClick(ui->changePass->text());
     //emit updateClicked(jsonDoc);
 }
