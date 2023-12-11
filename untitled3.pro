@@ -12,7 +12,6 @@ CONFIG += c++17
 
 SOURCES += \
     dbauthhandler.cpp \
-    dbhandler.cpp \
     login.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -20,7 +19,6 @@ SOURCES += \
 
 HEADERS += \
     dbauthhandler.h \
-    dbhandler.h \
     login.h \
     mainwindow.h \
     regist.h

@@ -5,20 +5,23 @@
 #include <QVariantMap>
 #include <QDebug>
 
+//Set up for database handling
 DBAuthHandler::DBAuthHandler(QObject *parent)
     : QObject{parent}
 {
     mode = 0;
     apiKey = "AIzaSyDWONq0OiwfuQ-PLnfhBDCQ1DYehWkSNYE";
     networkManager = new QNetworkAccessManager(this);
-    //connect(this, SIGNAL(userSignedIn()), this, SLOT(performAuthinticatedDBCall()));
 }
 
+//Set the API Key
 void DBAuthHandler::setAPIKey(const QString &APIKey)
 {
     apiKey = APIKey;
 }
 
+
+//New User sign up to database
 void DBAuthHandler::userSignUp(const QString &email, const QString &password, const QJsonDocument jDoc)
 {
     QString signUpEndpoint = "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=" + apiKey;
@@ -34,6 +37,7 @@ void DBAuthHandler::userSignUp(const QString &email, const QString &password, co
     performPOST(signUpEndpoint, jsonPayload);
 }
 
+//User sign in to database
 void DBAuthHandler::userSignIn(const QString &email, const QString &password)
 {
     QString signInEndpoint = "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=" + apiKey;
@@ -58,6 +62,7 @@ void DBAuthHandler::performPOST(const QString &url, const QJsonDocument &payload
     connect(networkReply, SIGNAL(readyRead()), this, SLOT(parseResponse()));
 }
 
+//Acts when Network sends data that is ready to be read
 void DBAuthHandler::networkReplyReadyRead()
 {
     QByteArray response = networkReply->readAll();
@@ -68,6 +73,7 @@ void DBAuthHandler::networkReplyReadyRead()
     emit userSignedIn(jsonDoc);
 }
 
+//Parses the response from the database
 void DBAuthHandler::parseResponse()
 {
     QJsonDocument jsonDocument = QJsonDocument::fromJson(networkReply->readAll());
@@ -109,6 +115,7 @@ void DBAuthHandler::parseResponse()
     mode = 0;
 }
 
+//Authenticated post data to database
 void DBAuthHandler::performAuthinticatedPostData()
 {
 
@@ -119,6 +126,7 @@ void DBAuthHandler::performAuthinticatedPostData()
     networkManager->post(newRequest, jsonDoc.toJson());
 }
 
+//Change Password of user authenticated that logged in
 void DBAuthHandler::performAuthinticatedChangePass(const QString &password)
 {
     mode = 3;
@@ -132,6 +140,8 @@ void DBAuthHandler::performAuthinticatedChangePass(const QString &password)
     performPOST(endpoint, jsonPayload);
 }
 
+
+//Authenticated put data to database
 void DBAuthHandler::performAuthinticatedPutData(const QJsonDocument jDoc)
 {
 
@@ -142,6 +152,7 @@ void DBAuthHandler::performAuthinticatedPutData(const QJsonDocument jDoc)
     networkManager->put(newRequest, jDoc.toJson());
 }
 
+//Gets data from database by authenticated user
 void DBAuthHandler::performAuthinticatedDBCall()
 {
     qDebug() << userEmail;

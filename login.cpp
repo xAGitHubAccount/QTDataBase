@@ -16,6 +16,7 @@ login::~login()
     delete ui;
 }
 
+//Sets up login screen data from database based on user that logged in
 void login::userLoggedIn(QJsonDocument jDoc)
 {
     ui->emailLogged->setText(jDoc.object().value("Email").toString());
@@ -23,6 +24,7 @@ void login::userLoggedIn(QJsonDocument jDoc)
     ui->passLogged->setText(jDoc.object().value("Password").toString());
 }
 
+//Changes password of user account and updates the database as well
 void login::changePassLogged()
 {
     ui->passLogged->setText(ui->changePass->text());
@@ -36,6 +38,7 @@ void login::changePassLogged()
     ui->update->setEnabled(true);
 }
 
+//Back to main window
 void login::on_pushButton_clicked()
 {
     emit backClicked();
@@ -43,15 +46,10 @@ void login::on_pushButton_clicked()
     ui->update->setEnabled(true);
 }
 
+//When update clicked begins update of user password passed on what was in the line edit
 void login::on_update_clicked()
 {
-    //QVariantMap newAccount;
-    //newAccount["Email"] = ui->emailLogged->text();
-    //newAccount["Username"] = ui->userLogged->text();
-    //newAccount["Password"] = ui->changePass->text();
-    //QJsonDocument jsonDoc = QJsonDocument::fromVariant(newAccount);
     ui->update->setEnabled(false);
     emit updateClick(ui->changePass->text());
-    //emit updateClicked(jsonDoc);
 }
 
