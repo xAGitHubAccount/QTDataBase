@@ -10,7 +10,7 @@ DBAuthHandler::DBAuthHandler(QObject *parent)
     : QObject{parent}
 {
     mode = 0;
-    apiKey = "AIzaSyDWONq0OiwfuQ-PLnfhBDCQ1DYehWkSNYE";
+    apiKey = "";
     networkManager = new QNetworkAccessManager(this);
 }
 
